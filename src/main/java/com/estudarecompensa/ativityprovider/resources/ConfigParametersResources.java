@@ -1,5 +1,8 @@
 package com.estudarecompensa.ativityprovider.resources;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,12 +14,12 @@ import com.estudarecompensa.ativityprovider.entities.ConfigParameters;
 @RequestMapping
 public class ConfigParametersResources {
 
-    @RequestMapping(value="/json_params_url")
-    public ResponseEntity<ConfigParameters> findAllParameters()
+    // this endpoint return the json_params_url
+    @GetMapping(value="/configure_params_ativity")
+    public ResponseEntity<List<Map<String, String>>> findAllParameters()
     {
-        ConfigParameters confPar = new ConfigParameters(1L, "What is the Question?", "I Don't kown", "This is a question?");
-        return ResponseEntity.ok().body(confPar);
-        
+        ConfigParameters confPar = new ConfigParameters();
+        return ResponseEntity.ok().body(confPar.getJson_params_url());  
     }
     
 }

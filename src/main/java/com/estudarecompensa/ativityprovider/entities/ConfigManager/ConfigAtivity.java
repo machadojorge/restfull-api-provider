@@ -1,10 +1,10 @@
-package com.estudarecompensa.ativityprovider.entities;
+package com.estudarecompensa.ativityprovider.entities.ConfigManager;
 
 import java.io.Serializable;
 
 import com.estudarecompensa.ativityprovider.interfaces.IView;
 
-public class ConfigManager implements Serializable {
+public class ConfigAtivity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private Long id;
@@ -13,13 +13,16 @@ public class ConfigManager implements Serializable {
 
 
     // In this cConstructor we inject one interface for the Views
-    public ConfigManager(IView view)
+    public ConfigAtivity(IView view)
     {
-        System.out.println("config_url");
+    
         viewConfig = view.viewProvider("config_url");
-        System.out.println(viewConfig);
     }
 
+    public ConfigAtivity()
+    {
+        
+    }
 
 
     public String getViewConfig() {

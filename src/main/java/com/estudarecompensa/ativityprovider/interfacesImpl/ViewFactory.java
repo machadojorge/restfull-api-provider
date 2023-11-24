@@ -4,19 +4,17 @@ import com.estudarecompensa.ativityprovider.interfaces.IView;
 
 public class ViewFactory implements IView {
 
-    private String viewCnfig;
     public ViewFactory()
     {
-        viewCnfig = "This is a Web page, in one line! \nThis is the code of the view config_url"; 
     }
 
     @Override
     public String viewProvider(String viewRequest) {
-        if (viewRequest.equals("config_url"))
+        if (viewRequest.equals("configure_ativity"))
         {
-            return viewCnfig;
+            return "config";
         }
-      return viewCnfig;
+      return "invalidpage";
     }
     
 }

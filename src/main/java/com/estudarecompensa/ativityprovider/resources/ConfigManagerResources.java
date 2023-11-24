@@ -1,26 +1,37 @@
 package com.estudarecompensa.ativityprovider.resources;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+import java.util.Map;
 
-import com.estudarecompensa.ativityprovider.entities.ConfigManager;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+
+import com.estudarecompensa.ativityprovider.entities.ConfigManager.ConfigAnalyticsAtivity;
 import com.estudarecompensa.ativityprovider.interfaces.IView;
 import com.estudarecompensa.ativityprovider.interfacesImpl.ObjectFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RestController
-@RequestMapping
+
+@Controller
 public class ConfigManagerResources {
     
-    @RequestMapping(value="/config_url")
-    public ResponseEntity<ConfigManager> returnConfigWebPage()
+    // this endpoint is a GetMethod that returns the Web page for configure the activity
+    @GetMapping(value="/configure_ativity")
+    public String returnConfigWebPage()
     {
+        IView view = ObjectFactory.createViewFactory();
 
-        IView viewConfig = ObjectFactory.createViewFactory();
-        System.out.println("View Config: " + viewConfig);
-        ConfigManager confManager = new ConfigManager(viewConfig);
-        System.out.println("config_managr: " + confManager);
-        return ResponseEntity.ok().body(confManager);
-
+        return view.viewProvider("configure_ativity");
     }
+
+
+    // this endpoint returns the config analitics activity
+    @GetMapping(value="analytics_ativity")
+    public ResponseEntity<Map<String, List<Map<String, String>>>> findAllAnaliticsParamters()
+    {
+        ConfigAnalyticsAtivity confAnalitics = new ConfigAnalyticsAtivity();
+        
+        return ResponseEntity.ok().body(confAnalitics.getAnalytics_list_url());
+    }
+    
 }
