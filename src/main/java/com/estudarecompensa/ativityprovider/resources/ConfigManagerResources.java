@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ConfigManagerResources {
 
     //this endpoint is just for testing
-    @GetMapping(value="/")
+    @GetMapping("/")
     public String returnRootView()
     {
         return "index";
