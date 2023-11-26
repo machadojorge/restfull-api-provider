@@ -1,0 +1,8 @@
+{
+    "name": "+Estudo+Recompensa",
+    "config_url": "https://estudo-recompensa.onrender.com/configure_ativity",
+    "json_params_url": "https://estudo-recompensa.onrender.com/configure_params_ativity",
+    "user_url": "https://estudo-recompensa.onrender.com/deploy_ativity?id=",
+    "analytics_url": "https://estudo-recompensa.onrender.com/analytics_review_ativity",
+    "analytics_list_url": "https://estudo-recompensa.onrender.com/analytics_ativity"
+    }

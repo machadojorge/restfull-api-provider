@@ -15,7 +15,7 @@ public class DeployActivityResources {
     public ResponseEntity<String> InstanceActivity(@RequestParam String id)
     {
         String id_ativity = "12345";
-        String url = "http://<domain>/ativity_provider?id="+ id_ativity;
+        String url = "https://estudo-recompensa.onrender.com/ativity_provider?id="+ id_ativity;
         return ResponseEntity.ok().body(url);
     }
 

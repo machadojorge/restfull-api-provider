@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ConfigManagerResources {
+
+    //this endpoint is just for testing
+    @GetMapping(value="/")
+    public String returnRootView()
+    {
+        return "index";
+    }
     
     // this endpoint is a GetMethod that returns the Web page for configure the activity
     @GetMapping(value="/configure_ativity")

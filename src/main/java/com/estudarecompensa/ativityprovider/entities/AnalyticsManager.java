@@ -69,6 +69,7 @@ public class AnalyticsManager implements Serializable{
          Map<String, Object> mapValues = new HashMap<>();
         mapValues.put("name", name);
         mapValues.put("Value", obj);
+        System.out.println(mapValues);
         return mapValues;
     }
 
