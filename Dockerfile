@@ -10,6 +10,8 @@ COPY src/main/resources/application.properties application.properties
 
 COPY src/main/resources/templates templates/
 
+COPY system.properties /system.properties
+
 EXPOSE 8080 5432
 
 CMD ["java", "-jar", "app.jar"]
