@@ -1,0 +1,40 @@
+package com.estudarecompensa.ativityprovider.services;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.estudarecompensa.ativityprovider.entities.ConfigParameters;
+import com.estudarecompensa.ativityprovider.repositories.ConfigParametersRepository;
+
+
+@Service
+public class ConfigParametersService {
+    
+      @Autowired
+    private ConfigParametersRepository repository;
+
+    // creates a method that return all users in the DB
+    public ConfigParameters findAll(ConfigParameters configParams)
+    {
+       List<ConfigParameters> listFromRepository = repository.findAll();
+       this.addToMap(listFromRepository, configParams );
+
+       return configParams;
+
+    }
+
+    // Este metodo vai criar o Map com o formato do JSON pretendido
+    public void addToMap(List<ConfigParameters> dataFromDatabase, ConfigParameters configParams)
+    {
+        for(ConfigParameters t : dataFromDatabase)
+        {
+             Map<String, String> map = new HashMap<String, String>();
+            map.put("name",t.getAttribute());
+            map.put("type", t.getType());
+            configParams.addList(map);
+        }
+    }
+
+}

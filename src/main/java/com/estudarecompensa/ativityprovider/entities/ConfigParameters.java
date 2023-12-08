@@ -1,180 +1,125 @@
 package com.estudarecompensa.ativityprovider.entities;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-public class ConfigParameters implements Serializable{
+// Esta vai ser a classe singlton, pois, independentemente do numero de 
+// criações desta atividade, os parametros de configuração da atividade
+// serão sempre os mesmos, logo faz sentido termos uma referencia única que,
+// carrega esses parametros da base de dados uma unica vez (na criação da 1º atiividade)
+// e as restantes atividades que poderão ser configuradas, utilizarão a mesma 
+// referencia para o objecto já criado
+
+@Entity
+@Table(name = "tb_config_params")
+public class ConfigParameters{
 
     private static final long serialVersionUID = 1L;
 
+    private static ConfigParameters instance;
+    private static List<Map<String, String>> configList;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String typeTextPlain = "text/plain";
-    List<Map<String, String>> json_params_url = new ArrayList<Map<String,String>>();
-    private String urlInfo;
-    private String questao_1;
-    private String questao_suplente_1;
-    private String resposta_1_1;
-    private String resposta_1_2;
-    private String resposta_1_3;
-    private String resposta_1_4;
-    private String solucao_1;
-    private String solucao_suplente_1;
-
-   
-
+    private String attribute;
+    private String type;
 
     
-    
-    public ConfigParameters()
+    private ConfigParameters()
     {
-        this.urlInfo = this.createParamsMap("url_info", "url");
-        this.questao_1 = this.createParamsMap("questao_1", typeTextPlain);
-        this.questao_suplente_1 = this.createParamsMap("questao_suplente_1", typeTextPlain);
-        this.resposta_1_1 = this.createParamsMap("resposta_1_1", typeTextPlain);
-        this.resposta_1_2 = this.createParamsMap("resposta_1_2", typeTextPlain);
-        this.resposta_1_3 = this.createParamsMap("resposta_1_3", typeTextPlain);
-        this.resposta_1_4 = this.createParamsMap("resposta_1_4", typeTextPlain);
-        this.solucao_1 = this.createParamsMap("solucao_1", typeTextPlain);
-        this.solucao_suplente_1 = this.createParamsMap("solucao_sumplente_1", typeTextPlain);   
+        configList = new ArrayList<Map<String, String>>();
+        this.attribute = "";
+        this.type = "";
     }
 
-
-    private String createParamsMap(String param, String type)
+    // implementar o metodo que controla e retorna o objecto da classe, 
+    // é utilizado o synchronized para ser thread safe
+    // é verificado antes se existe já algum objecto criado e só depois é 
+    // feito o synchronized e criado um novo objecto (caso não exista), 
+    // porque o synchronized pode trazer problemas de desempenho
+    // 
+    public static ConfigParameters getInstance()
     {
-         Map<String, String> param_map = new HashMap<String, String>();
-        param_map.put("name",param);
-        param_map.put("type",type);
-        this.json_params_url.add(param_map);
-        return param;
-    }
-
-    public List<Map<String, String>> getJson_params_url() {
-        return json_params_url;
-    }
-
-
-
-    public void setJson_params_url(List<Map<String, String>> json_params_url) {
-        this.json_params_url = json_params_url;
+        ConfigParameters result = instance;
+        if (result != null) {
+            return result;
+        }
+        synchronized(ConfigParameters.class) {
+            if (instance == null) {
+                instance = new ConfigParameters();
+            }
+            return instance;
+        }
     }
 
 
+    public static long getSerialversionid() {
+        return serialVersionUID;
+    }
 
     public Long getId() {
         return id;
     }
 
-
-
     public void setId(Long id) {
         this.id = id;
     }
 
-
-    public String getTypeTextPlain() {
-        return typeTextPlain;
+    public String getAttribute() {
+        return attribute;
     }
 
-
-    public void setTypeTextPlain(String typeTextPlain) {
-        this.typeTextPlain = typeTextPlain;
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
-
-    public String getUrlInfo() {
-        return urlInfo;
+    public String getType() {
+        return type;
     }
 
-
-    public void setUrlInfo(String urlInfo) {
-        this.urlInfo = urlInfo;
+    public void setType(String type) {
+        this.type = type;
     }
 
-
-    public String getQuestao_1() {
-        return questao_1;
+    public List<Map<String,String>> returnListConfigParams()
+    {
+        return configList;
     }
 
-
-    public void setQuestao_1(String questao_1) {
-        this.questao_1 = questao_1;
+    @Override
+    public String toString() {
+        return "Test [id=" + id + ", atributo=" + attribute + ", tipo=" + type + "]";
     }
 
-
-    public String getQuestao_suplente_1() {
-        return questao_suplente_1;
+    public void addList(Map<String, String> map)
+    {
+        configList.add(map);
     }
 
+    
+    public void showMap()
+    {
+        for (Map<String, String> data : configList) {
+            System.out.println("Dados:" + data);
 
-    public void setQuestao_suplente_1(String questao_suplente_1) {
-        this.questao_suplente_1 = questao_suplente_1;
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                System.out.println(key + ": " + value);
+            }
+
+        }   
+        System.out.println(); // Adicionar uma linha em branco entre os mapas
     }
 
-
-    public String getResposta_1_1() {
-        return resposta_1_1;
-    }
-
-
-    public void setResposta_1_1(String resposta_1_1) {
-        this.resposta_1_1 = resposta_1_1;
-    }
-
-
-    public String getResposta_1_2() {
-        return resposta_1_2;
-    }
-
-
-    public void setResposta_1_2(String resposta_1_2) {
-        this.resposta_1_2 = resposta_1_2;
-    }
-
-
-    public String getResposta_1_3() {
-        return resposta_1_3;
-    }
-
-
-    public void setResposta_1_3(String resposta_1_3) {
-        this.resposta_1_3 = resposta_1_3;
-    }
-
-
-    public String getResposta_1_4() {
-        return resposta_1_4;
-    }
-
-
-    public void setResposta_1_4(String resposta_1_4) {
-        this.resposta_1_4 = resposta_1_4;
-    }
-
-
-    public String getSolucao_1() {
-        return solucao_1;
-    }
-
-
-    public void setSolucao_1(String solucao_1) {
-        this.solucao_1 = solucao_1;
-    }
-
-
-    public String getSolucao_suplente_1() {
-        return solucao_suplente_1;
-    }
-
-
-    public void setSolucao_suplente_1(String solucao_suplente_1) {
-        this.solucao_suplente_1 = solucao_suplente_1;
-    }
-
-
-
+   
   
 
 }

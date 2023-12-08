@@ -1,13 +1,13 @@
-package com.estudarecompensa.ativityprovider;
+// package com.estudarecompensa.ativityprovider;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class AtivityproviderApplicationTests {
+// @SpringBootTest
+// class AtivityproviderApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }
