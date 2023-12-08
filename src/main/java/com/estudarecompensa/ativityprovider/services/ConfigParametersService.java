@@ -15,7 +15,7 @@ public class ConfigParametersService {
       @Autowired
     private ConfigParametersRepository repository;
 
-    // creates a method that return all users in the DB
+    // Este método vai buscar os dados à base de dados
     public ConfigParameters findAll(ConfigParameters configParams)
     {
        List<ConfigParameters> listFromRepository = repository.findAll();
@@ -30,7 +30,7 @@ public class ConfigParametersService {
     {
         for(ConfigParameters t : dataFromDatabase)
         {
-             Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<String, String>();
             map.put("name",t.getAttribute());
             map.put("type", t.getType());
             configParams.addList(map);
