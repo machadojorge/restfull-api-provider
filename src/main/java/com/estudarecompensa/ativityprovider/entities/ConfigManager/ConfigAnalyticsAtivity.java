@@ -41,7 +41,9 @@ public class ConfigAnalyticsAtivity {
     
     }
     
-// Implementação do Singlton a travez do methodo getInstance()
+// Implementação do Singlton atravez do methodo getInstance()
+// Foi aplicado o mesmo metodo de implementação do Singleton que na classe 
+// "ConfigParameters.java"
      public static ConfigAnalyticsAtivity getInstance()
     {
         ConfigAnalyticsAtivity result = instance;

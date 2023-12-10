@@ -9,7 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-// Esta vai ser a classe singlton, pois, independentemente do número de 
+// Esta vai ser a classe singleton, pois, independentemente do número de 
 // criações desta atividade, os parametros de configuração da atividade
 // serão sempre os mesmos, logo faz sentido termos uma instancia única que,
 // carrega esses parametros da base de dados uma unica vez (na criação da 1º atiividade)
@@ -39,12 +39,22 @@ public class ConfigParameters{
         this.type = "";
     }
 
-    // implementar o metodo que controla e retorna o objecto da classe, 
+    // Para implementar o metodo que controla e retorna o objecto da classe, 
     // é utilizado o synchronized para ser thread-safe
     // é verificado antes se existe já algum objecto criado, se houver devolve-o 
     // caso contrario é que é feito o synchronized e criado um novo objecto (caso não exista), 
     // é uma abordagem com melhor desempenho pois o synchronized tem um custo grande 
     // em questões de desempenho
+
+    // A abordagem adoptada aqui é chamada de bloqueio de verificação dupla(DLC). 
+    // Isto existe para evitar condições de corrida entre multiplos threads que podem
+    // tentar obter uma instancia Singleton ao mesmo tempo, criando uma instancia separada
+    // como resultado.
+    // Pode parecer que ter a variável `result` aqui é completamente inútil. Há, no entanto,
+    // uma ressalva muito importante ao implementar o bloqueio de verificação dupla em Java, 
+    // que é resolvida com a introdução desta variável local.
+
+    // https://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
     public static ConfigParameters getInstance()
     {
         ConfigParameters result = instance;
