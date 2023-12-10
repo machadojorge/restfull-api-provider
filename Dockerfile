@@ -10,6 +10,8 @@ COPY src/main/resources/application.properties application.properties
 
 COPY src/main/resources/templates templates/
 
+COPY src/main/resources/static static/
+
 COPY system.properties /system.properties
 
 EXPOSE 8080 5432
