@@ -3,10 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configure Page</title>
+    <title>Exemplo de Perguntas e Respostas</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question {
+            width: 45%;
+        }
+
+        .answer {
+            width: 45%;
+        }
+
+        .text-box {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+    <img src="log.jpg" alt="+ Estudo + Recompensa">
 </head>
 <body>
-    <h1>Hello World!</h1>
-    <p>This is a configure page for the creator creates the Activity with the configure</p>
+
+
+    <h1>Configuração da Atividade</h1>
+
+    <p>1 - Url de informação:</p>
+    <textarea type="url" id="url_info" onfocus=this.value='' rows="1" cols="50"></textarea>
+
+    <div class="container">
+        <div class="question">
+            <p>2 - Questão 1:</p>
+            <textarea type="text/plain" id="questao_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>3 - Questão Suplente 1:</p>
+            <textarea type="text/plain" id="questao_suplente_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>4 - Resposta 1.1:</p>
+            <textarea type="text/plain" id="resposta_1_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>5 - Resposta 1.2:</p>
+            <textarea type="text/plain" id="resposta_1_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>6 - Resposta 1.3:</p>
+            <textarea type="text/plain" id="resposta_1_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>7 - Resposta 1.4:</p>
+            <textarea type="text/plain" id="resposta_1_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>8 - Solução 1:</p>
+            <textarea type="text/plain" id="solucao_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>9 - Solução Suplente 1:</p>
+            <textarea type="text/plain" id="solucao_suplente_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+        </div>
+        
+
+        <div class="answer">
+            <p>26 - Questão 4:</p>
+            <textarea type="text/plain" id="questao_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>27 - Questão Suplente 4:</p>
+            <textarea type="text/plain" id="questao_suplente_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>28 - Resposta 4.1:</p>
+            <textarea type="text/plain" id="resposta_4_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>29 - Resposta 4.2:</p>
+            <textarea type="text/plain" id="resposta_4_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>30 - Resposta 4.3:</p>
+            <textarea type="text/plain" id="resposta_4_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>31 - Resposta 4.4:</p>
+            <textarea type="text/plain" id="resposta_4_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>32 - Solução 4:</p>
+            <textarea type="text/plain" id="solucao_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>33 - Solução Suplente 4:</p>
+            <textarea type="text/plain" id="solucao_suplente_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+        </div>
+
+        <div class="question">
+            <p>10 - Questão 2:</p>
+            <textarea type="text/plain" id="questao_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>11 - Questão Suplente 2:</p>
+            <textarea type="text/plain" id="questao_suplente_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>12 - Resposta 2.1:</p>
+            <textarea type="text/plain" id="resposta_2_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>13 - Resposta 2.2:</p>
+            <textarea type="text/plain" id="resposta_2_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>14 - Resposta 2.3:</p>
+            <textarea type="text/plain" id="resposta_2_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>15 - Resposta 2.4:</p>
+            <textarea type="text/plain" id="resposta_2_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>16 - Solução 2:</p>
+            <textarea type="text/plain" id="solucao_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>17 - Solução Suplente 2:</p>
+            <textarea type="text/plain" id="solucao_suplente_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+        </div>
+
+        <div class="answer">
+            <p>34 - Questão Recompensa  1:</p>
+            <textarea type="text/plain" id="questao_rec_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>35 - Questão Recompensa Suplente 1:</p>
+            <textarea type="text/plain" id="questao_suplente_rec_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>36 - Resposta Recompensa 1.1:</p>
+            <textarea type="text/plain" id="resposta_rec_1_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>37 - Resposta Recompensa 1.2:</p>
+            <textarea type="text/plain" id="resposta_rec_1_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>38 - Resposta Recompensa 1.3:</p>
+            <textarea type="text/plain" id="resposta_rec_1_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>39 - Resposta Recompensa 1.4:</p>
+            <textarea type="text/plain" id="resposta_rec_1_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>40 - Solução Suplente 1:</p>
+            <textarea type="text/plain" id="solucao_suplente_rec_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+        </div>
+
+        <div class="question">
+            <p>18 - Questão 3:</p>
+            <textarea type="text/plain" id="questao_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>19 - Questão Suplente 3:</p>
+            <textarea type="text/plain" id="questao_suplente_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>20 - Resposta 3.1:</p>
+            <textarea type="text/plain" id="resposta_3_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>21 - Resposta 3.2:</p>
+            <textarea type="text/plain" id="resposta_3_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>22 - Resposta 3.3:</p>
+            <textarea type="text/plain" id="resposta_3_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>23 - Resposta 3.4:</p>
+            <textarea type="text/plain" id="resposta_3_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>24 - Solução 3:</p>
+            <textarea type="text/plain" id="solucao_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>25 - Solução Suplente 3:</p>
+            <textarea type="text/plain" id="solucao_suplente_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+        </div>
+
+        <div class="answer">
+            <p>41 - Questão Recompensa  2:</p>
+            <textarea type="text/plain" id="questao_rec_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>42 - Questão Recompensa Suplente 2:</p>
+            <textarea type="text/plain" id="questao_suplente_rec_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>43 - Resposta Recompensa 2.1:</p>
+            <textarea type="text/plain" id="resposta_rec_2_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>44 - Resposta Recompensa 2.2:</p>
+            <textarea type="text/plain" id="resposta_rec_2_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>45 - Resposta Recompensa 2.3:</p>
+            <textarea type="text/plain" id="resposta_rec_2_3" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>46 - Resposta Recompensa 2.4:</p>
+            <textarea type="text/plain" id="resposta_rec_2_4" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>47 - Solução Suplente 2:</p>
+            <textarea type="text/plain" id="solucao_suplente_rec_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+        </div>
+        <div class="text-box">
+            <p>48 - Recompensa Nivel 1:</p>
+            <textarea type="text/plain" id="recompensa_nivel_1" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>49 - Recompensa Nivel 2:</p>
+            <textarea type="text/plain" id="recompensa_nivel_2" onfocus=this.value='' rows="1" cols="50"></textarea>
+            <p>50 - Código da Próxima Atividade</p>
+            <textarea type="text/plain" id="cod_proxima_atividade" onfocus=this.value='' rows="1" cols="50"></textarea>
+        </div>
+    </div>
+
 </body>
 </html>

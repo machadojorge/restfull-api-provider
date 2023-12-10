@@ -40,7 +40,11 @@ public class ConfigManagerResources {
     public ResponseEntity<Map<String, List<Map<String, String>>>> findAllAnaliticsParamters()
     {
         ConfigAnalyticsAtivity analyticsParams = ConfigAnalyticsAtivity.getInstance();
-        analyticsParams = service.findAll(analyticsParams);
+        if (analyticsParams.returnListConfigAnalytics().isEmpty())
+        {
+            analyticsParams = service.findAll(analyticsParams);
+        }
+    
         return ResponseEntity.ok().body(analyticsParams.returnListConfigAnalytics());
     }
     

@@ -6,17 +6,19 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.estudarecompensa.ativityprovider.entities.ConfigParameters;
+import com.estudarecompensa.ativityprovider.interfaces.IConfigParametersService;
 import com.estudarecompensa.ativityprovider.repositories.ConfigParametersRepository;
 
 
 @Service
-public class ConfigParametersService {
+public class ConfigParametersService implements IConfigParametersService<ConfigParameters> {
     
-      @Autowired
+    @Autowired
     private ConfigParametersRepository repository;
 
     // Este método vai buscar os dados à base de dados
-    public ConfigParameters findAll(ConfigParameters configParams)
+    @Override
+    public ConfigParameters getAllParameters(ConfigParameters configParams)
     {
        List<ConfigParameters> listFromRepository = repository.findAll();
        this.addToMap(listFromRepository, configParams );
@@ -36,5 +38,21 @@ public class ConfigParametersService {
             configParams.addList(map);
         }
     }
+
+    // @Override
+    // public ConfigParameters findAll(ConfigParameters ConfigParams) {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    // }
+
+    // @Override
+    // public <ConfigParameters> ConfigParameters findAll(ConfigParameters ConfigParams) {
+
+    //     System.out.println("Hello World");
+    //    List<ConfigParameters> listFromRepository = repository.findAll();
+    //    this.addToMap(listFromRepository, configParams );
+
+    //    return configParams;
+    // }
 
 }

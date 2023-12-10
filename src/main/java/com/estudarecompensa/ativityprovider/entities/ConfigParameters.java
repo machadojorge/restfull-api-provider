@@ -9,12 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-// Esta vai ser a classe singlton, pois, independentemente do numero de 
+// Esta vai ser a classe singlton, pois, independentemente do número de 
 // criações desta atividade, os parametros de configuração da atividade
-// serão sempre os mesmos, logo faz sentido termos uma referencia única que,
+// serão sempre os mesmos, logo faz sentido termos uma instancia única que,
 // carrega esses parametros da base de dados uma unica vez (na criação da 1º atiividade)
 // e as restantes atividades que poderão ser configuradas, utilizarão a mesma 
-// referencia para o objecto já criado
+// instancia do objecto, que já tinha sido criado, com os dados nele armazenado
 
 @Entity
 @Table(name = "tb_config_params")
@@ -40,11 +40,11 @@ public class ConfigParameters{
     }
 
     // implementar o metodo que controla e retorna o objecto da classe, 
-    // é utilizado o synchronized para ser thread safe
-    // é verificado antes se existe já algum objecto criado e só depois é 
-    // feito o synchronized e criado um novo objecto (caso não exista), 
-    // porque o synchronized pode trazer problemas de desempenho
-    // 
+    // é utilizado o synchronized para ser thread-safe
+    // é verificado antes se existe já algum objecto criado, se houver devolve-o 
+    // caso contrario é que é feito o synchronized e criado um novo objecto (caso não exista), 
+    // é uma abordagem com melhor desempenho pois o synchronized tem um custo grande 
+    // em questões de desempenho
     public static ConfigParameters getInstance()
     {
         ConfigParameters result = instance;
