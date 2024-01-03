@@ -1,3 +1,4 @@
+com\estudarecompensa\ativityprovider\interfaces\IJson.class
 com\estudarecompensa\ativityprovider\resources\ConfigParametersResources.class
 com\estudarecompensa\ativityprovider\resources\ConfigManagerResources.class
 com\estudarecompensa\ativityprovider\AtivityproviderApplication.class
@@ -16,3 +17,4 @@ com\estudarecompensa\ativityprovider\repositories\ConfigParametersRepository.cla
 com\estudarecompensa\ativityprovider\services\ConfigParametersService.class
 com\estudarecompensa\ativityprovider\entities\ConfigManager\ConfigAtivity.class
 com\estudarecompensa\ativityprovider\entities\ConfigManager\DeployActivity.class
+com\estudarecompensa\ativityprovider\adapter\JsonAdapter.class

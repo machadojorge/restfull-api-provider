@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,9 +20,7 @@ public class ConfigAnalyticsAtivity {
     private static final long serialVersionUID = 1L;
 
     private static ConfigAnalyticsAtivity instance;
-    private static Map<String, List<Map<String, String>>> analytics_list_url;
-    private static List<Map<String, String>> quantAnalytics;
-    private static List<Map<String, String>> quanlAnalytics;
+    private static JSONObject analiticsJson = new JSONObject();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,16 +28,10 @@ public class ConfigAnalyticsAtivity {
     private String name;
     private String type;
     private int analytics_type;
-    // Neste caso: 
-    // 1 - parametros Quantitativos
-    // 2 - parametros Qualitativos
 
 
     private ConfigAnalyticsAtivity()
     {
-       analytics_list_url = new HashMap<String, List<Map<String, String>>>();
-       quantAnalytics = new ArrayList<>();
-       quanlAnalytics  = new ArrayList<>();
     
     }
     
@@ -92,9 +86,13 @@ public class ConfigAnalyticsAtivity {
         return analytics_type;
     }
 
-    public Map<String,List<Map<String,String>>> returnListConfigAnalytics()
-    {
-        return analytics_list_url;
+    
+    public JSONObject getAnaliticsJson() {
+        return analiticsJson;
+    }
+
+    public void setAnaliticsJson(JSONObject analiticsJson) {
+        ConfigAnalyticsAtivity.analiticsJson = analiticsJson;
     }
 
     @Override
@@ -102,20 +100,5 @@ public class ConfigAnalyticsAtivity {
         return "Test [id=" + id + ", atributo=" + name + ", tipo=" + type + "]";
     }
 
-    public void addToQualityList(Map<String, String> map)
-    {
-        quanlAnalytics.add(map);
-    }
-
-    public void addToQuantityList(Map<String, String> map)
-    {
-        quantAnalytics.add(map);
-    }
-
-    public void addAnalyticsListToMap()
-    {
-        analytics_list_url.put("qualAnalytics", quanlAnalytics);
-        analytics_list_url.put("quantAnalytics", quantAnalytics);
-    }
     
 }

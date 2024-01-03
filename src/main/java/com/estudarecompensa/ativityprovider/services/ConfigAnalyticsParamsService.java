@@ -1,8 +1,6 @@
 package com.estudarecompensa.ativityprovider.services;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.estudarecompensa.ativityprovider.entities.ConfigManager.ConfigAnalyticsAtivity;
@@ -15,39 +13,17 @@ public class ConfigAnalyticsParamsService {
     @Autowired
     private ConfigAnalyticsAtivityRepository repository;
     
-    // Neste caso: 
-    // 1 - parametros Quantitativos
-    // 2 - parametros Qualitativos
-    // Este método vai buscar os dados à base de dados
-    public ConfigAnalyticsAtivity findAll(ConfigAnalyticsAtivity configParams)
+    // Neste caso, é feita uma consulta à base de dados, pedindo os parametros Analiticos
+    // Essa consulta é feita pelo metodo "findAll()" que devolve uma lista de Objectos do tipo 
+    // "ConfigAnaliticsAtivity". Essa lista é devolvida à classe "JasonAdapter" (Classe Adapter do Padrão Adapter/Wrapper Pattern)
+    // Que após receber, como resposta, esta lista, vai convertela em um objecto JSON, no formato correto
+    // (O formato que o Inve!RA espera), e devolve esse objecto ao Controller "ConfigManagerResources" que o Devolve, como 
+    // resposta, ao pedido do Inven!RA.
+    public List<ConfigAnalyticsAtivity> findAll()
     {
        List<ConfigAnalyticsAtivity> listFromRepository = repository.findAll();
-       this.addToMap(listFromRepository, configParams );
-       return configParams;
+       return listFromRepository;
     }
-
-
-    // Este metodo vai criar o Map com o formato do JSON pretendido. Primeiro adiciona às listas (qualitativo e quantitativo)
-    // Depois adiciona essas listas a um Map.
-    public void addToMap(List<ConfigAnalyticsAtivity> dataFromDatabase, ConfigAnalyticsAtivity configParams)
-    {
-     
-        for(ConfigAnalyticsAtivity t : dataFromDatabase)
-        {
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("name",t.getAttribute());
-            map.put("type", t.getType());
-
-            if (t.getTypeOfAnalyses() == 1)
-            {
-                configParams.addToQuantityList(map);
-            }
-            if(t.getTypeOfAnalyses() == 0)
-            {
-                configParams.addToQualityList(map);
-            }   
-        }
-        configParams.addAnalyticsListToMap();
-    }
+ 
 
 }
