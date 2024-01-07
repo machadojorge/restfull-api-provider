@@ -39,20 +39,4 @@ public class ConfigParametersService implements IConfigParametersService<ConfigP
         }
     }
 
-    // @Override
-    // public ConfigParameters findAll(ConfigParameters ConfigParams) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'findAll'");
-    // }
-
-    // @Override
-    // public <ConfigParameters> ConfigParameters findAll(ConfigParameters ConfigParams) {
-
-    //     System.out.println("Hello World");
-    //    List<ConfigParameters> listFromRepository = repository.findAll();
-    //    this.addToMap(listFromRepository, configParams );
-
-    //    return configParams;
-    // }
-
 }

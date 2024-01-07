@@ -1,10 +1,5 @@
 package com.estudarecompensa.ativityprovider.entities.ConfigManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.json.JSONObject;
 
 import jakarta.persistence.Entity;
@@ -20,6 +15,8 @@ public class ConfigAnalyticsAtivity {
     private static final long serialVersionUID = 1L;
 
     private static ConfigAnalyticsAtivity instance;
+
+    // JSON Object que vai guardar os parametros Analiticos de configuração vindos da base de dados
     private static JSONObject analiticsJson = new JSONObject();
 
     @Id
