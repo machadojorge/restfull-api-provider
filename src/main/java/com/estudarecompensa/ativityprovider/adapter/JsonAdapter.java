@@ -61,7 +61,7 @@ public class JsonAdapter<T> implements IJson {
      
         // Chamar o metodo que vai buscar os dados à base de dados
         List<ConfigAnalyticsAtivity> analitics = ((ConfigAnalyticsParamsService) service).getAllAnalyticsParams();
-  
+        System.out.println("Result: " + analitics);
         //criar Objectos JSON Auxiliares
         JSONObject finalJson = new JSONObject();
 

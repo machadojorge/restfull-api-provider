@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,9 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.estudarecompensa.ativityprovider.abstractClass.AbstractDBOperation;
+import com.estudarecompensa.ativityprovider.abstractClass.InsertDBOperation;
+import com.estudarecompensa.ativityprovider.abstractClass.SearchDBOperation;
+import com.estudarecompensa.ativityprovider.entities.ConfigManager.ConfigAnalyticsAtivity;
 import com.estudarecompensa.ativityprovider.entities.ConfigManager.DeployActivity;
 import com.estudarecompensa.ativityprovider.entities.DAO.AnaliticDao;
 import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDao;
+import com.estudarecompensa.ativityprovider.interfaces.IConfigAnalyticsParams;
 import com.estudarecompensa.ativityprovider.interfaces.IConfigParametersService;
 import com.estudarecompensa.ativityprovider.interfaces.IDeploy;
 import com.estudarecompensa.ativityprovider.utils.CheckExist;
@@ -28,6 +34,8 @@ public class DeployActivityResources {
     private IDeploy serviceDeploy;
     @Autowired
     private IAnaliticDao serviceDao;
+    @Autowired
+    private IConfigAnalyticsParams service;
 
     @RequestMapping(value="/deploy_ativity", method=RequestMethod.GET)
     public ResponseEntity<String> InstanceActivity(@RequestParam String id)
@@ -98,6 +106,33 @@ public class DeployActivityResources {
       
        // Este é o endpoint onde submete a atividade para avaliação!
         return ResponseEntity.ok().body("ESTOU AQUI");
+    }
+
+       @RequestMapping(value="/test", method=RequestMethod.GET)
+    public ResponseEntity<String> testAtivity()
+    {
+        System.out.println("Service: " + service);
+        List<ConfigAnalyticsAtivity> configAnalytics = service.getAllAnalyticsParams();
+        System.out.println("Cheguei aqui--------"+ configAnalytics);
+        AbstractDBOperation operation = new SearchDBOperation(service);
+       JSONObject obj =  operation.executeOperation();
+       System.out.println(obj);
+      //System.out.println(analyticsParams.getAnaliticsJson());
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(obj.toString());
+    }
+
+       @RequestMapping(value="/test_2", method=RequestMethod.GET)
+    public ResponseEntity<String> insertTest()
+    {
+        System.out.println("Service: " + service);
+        DeployActivity ativity = new DeployActivity("TestDeploy");
+        List<ConfigAnalyticsAtivity> configAnalytics = service.getAllAnalyticsParams();
+        System.out.println("Cheguei aqui--------"+ configAnalytics);
+        AbstractDBOperation operation = new InsertDBOperation(serviceDeploy, ativity);
+       JSONObject obj =  operation.executeOperation();
+       System.out.println(obj);
+      //System.out.println(analyticsParams.getAnaliticsJson());
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(obj.toString());
     }
 
 }
