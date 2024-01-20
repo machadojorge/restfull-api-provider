@@ -18,6 +18,21 @@ public class AnaliticDaoService implements IAnaliticDao <AnaliticDao>{
     private AnaliticDaoRepository repository;
 
 
+    public List<AnaliticDao> findByativity_instance(String valorColuna)
+    {
+        List<AnaliticDao> listFromRepository = repository.encontrarPorColunas(valorColuna);
+
+        return listFromRepository;
+        
+    }
+
+    public List<AnaliticDao> findByativity_student(String valorColuna, String valorColuna_)
+    {
+        List<AnaliticDao> listFromRepository = repository.encontrarPorStudent(valorColuna, valorColuna_);
+
+        return listFromRepository;
+        
+    }
     @Override
     public List<AnaliticDao> getAllDeployInstance() {
         List<AnaliticDao> listFromRepository = repository.findAll();

@@ -26,6 +26,12 @@ public class ConfigParametersService implements IConfigParametersService<ConfigP
        return configParams;
 
     }
+    public List<ConfigParameters> getAllParameters()
+    {
+       List<ConfigParameters> listFromRepository = repository.findAll();
+       return listFromRepository;
+
+    }
 
     // Este metodo vai criar o Map com o formato do JSON pretendido
     public void addToMap(List<ConfigParameters> dataFromDatabase, ConfigParameters configParams)

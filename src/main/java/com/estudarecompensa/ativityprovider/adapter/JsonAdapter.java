@@ -92,4 +92,5 @@ public class JsonAdapter<T> implements IJson {
        return finalJson;
     }
     
+    
 }

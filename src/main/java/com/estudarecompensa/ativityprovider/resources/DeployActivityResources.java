@@ -36,6 +36,8 @@ public class DeployActivityResources {
     private IAnaliticDao serviceDao;
     @Autowired
     private IConfigAnalyticsParams service;
+    @Autowired
+    private IConfigParametersService serviceParams;
 
     @RequestMapping(value="/deploy_ativity", method=RequestMethod.GET)
     public ResponseEntity<String> InstanceActivity(@RequestParam String id)
@@ -94,6 +96,8 @@ public class DeployActivityResources {
    @PostMapping(value="/ativity/{ativity_id}/{student_id}")
     public ResponseEntity<String> sendAtivityPage(@PathVariable String ativity_id, @PathVariable String student_id, @RequestBody Map<String, Object> map)
     {
+
+        // Este pesquisar por atividade e aluno já esta pronto, 
         String id_ativity = ativity_id;
         String student = student_id;
         
@@ -109,15 +113,20 @@ public class DeployActivityResources {
     }
 
        @RequestMapping(value="/test", method=RequestMethod.GET)
-    public ResponseEntity<String> testAtivity()
+    public ResponseEntity<String> testAtivity() throws NoSuchMethodException, SecurityException
     {
-        System.out.println("Service: " + service);
-        List<ConfigAnalyticsAtivity> configAnalytics = service.getAllAnalyticsParams();
-        System.out.println("Cheguei aqui--------"+ configAnalytics);
-        AbstractDBOperation operation = new SearchDBOperation(service);
-       JSONObject obj =  operation.executeOperation();
-       System.out.println(obj);
-      //System.out.println(analyticsParams.getAnaliticsJson());
+    //     System.out.println("Service: " + service);
+    //     List<ConfigAnalyticsAtivity> configAnalytics = service.getAllAnalyticsParams();
+    //     System.out.println("Cheguei aqui--------"+ configAnalytics);
+    //     AbstractDBOperation operation = new SearchDBOperation(service);
+    //    JSONObject obj =  operation.executeAction();
+    //    System.out.println(obj);
+    //   //System.out.println(analyticsParams.getAnaliticsJson());
+        JSONObject objtparams = new JSONObject();
+        objtparams.put("StudentID", "This string is the student Inven!RA ID");
+        objtparams.put("InstanceID", "This string is the Inven!RA activity ID257");
+        AbstractDBOperation operation = new SearchDBOperation(serviceDao, objtparams);//serviceDao,"This string is the Inven!RA activity ID257" );
+        JSONObject obj = operation.executeAction();
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(obj.toString());
     }
 
@@ -129,8 +138,8 @@ public class DeployActivityResources {
         List<ConfigAnalyticsAtivity> configAnalytics = service.getAllAnalyticsParams();
         System.out.println("Cheguei aqui--------"+ configAnalytics);
         AbstractDBOperation operation = new InsertDBOperation(serviceDeploy, ativity);
-       JSONObject obj =  operation.executeOperation();
-       System.out.println(obj);
+       JSONObject obj =  operation.executeAction();
+       System.out.println(obj.toString());
       //System.out.println(analyticsParams.getAnaliticsJson());
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(obj.toString());
     }

@@ -1,5 +1,13 @@
 package com.estudarecompensa.ativityprovider.entities.DAO;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
@@ -177,4 +185,20 @@ public class AnaliticDao {
                 + ", concluiu_modulo=" + concluiu_modulo + "]";
     }
     
+    // public createLista()
+    // {
+    //     Map<String, List<Map<String, String>>> map;
+    //     list
+    //     Map<String, String> map2 = new HashMap<String, String>();
+    //     map2.put("name","acede_atividade");
+    //     map2.put("type":"boolean"), "value": "");{"name":"acede_atividade_info","type":"boolean"},{"name":"responde_questoes_modulo","type":"boolean"},{"name":"respostas_corretas","type":"integer"},{"name":"respostas_erradas","type":"integer"},{"name":"percentagem_acertos","type":"percentage"},{"name":"recompensa","type":"boolean"},{"name":"recompensa_nivel_1","type":"boolean"},{"name":"recompensa_nivel_2","type":"boolean"},{"name":"concluiu_modulo","type":"boolean"}],"qualAnalytics":[]})
+    //     JSONObject obj =  {"quatAnalytics":[{"name":"acede_atividade","type":"boolean"},{"name":"acede_atividade_info","type":"boolean"},{"name":"responde_questoes_modulo","type":"boolean"},{"name":"respostas_corretas","type":"integer"},{"name":"respostas_erradas","type":"integer"},{"name":"percentagem_acertos","type":"percentage"},{"name":"recompensa","type":"boolean"},{"name":"recompensa_nivel_1","type":"boolean"},{"name":"recompensa_nivel_2","type":"boolean"},{"name":"concluiu_modulo","type":"boolean"}],"qualAnalytics":[]}
+
+    public static void returnList(List<String>listName, List<String>listType)
+    {
+         listName = Arrays.asList("acede_atividade","acede_atividade_info","responde_questoes_modulo","respostas_corretas","respostas_erradas","percentagem_acertos","recompensa","recompensa_nivel_1","recompensa_nivel_2","concluiu_modulo");
+         listType = Arrays.asList("boolean", "boolean","boolean","integer","integer","percentage","boolean","boolean", "boolean","boolean");
+       
+    }
+    // }
 }
