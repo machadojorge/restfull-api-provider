@@ -1,27 +1,24 @@
 package com.estudarecompensa.ativityprovider.abstractClass;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONObject;
+import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDaoService;
+import com.estudarecompensa.ativityprovider.interfaces.IConfigAnalyticsParams;
+import com.estudarecompensa.ativityprovider.interfaces.IConfigParametersService;
+import com.estudarecompensa.ativityprovider.interfaces.IDeploy;
+
 
 public abstract class AbstractDBOperation <T, M>{
 
     // Atributos Genericos para armazenar as classes dos Serviços e
-    // Objetos/Strings para as pesquisas à base de dados
+    // Objetos/Strings para as pesquisas e inserts à base de dados
     // São partilhados pelas duas classes que herdam desta classe
     protected T service;
     protected M objectInstance;
 
-     // Mapa com os metodos atribuidos a cada classe especifica
-    // deste modo, não é necessário andar a percorrer sempre a lista 
-    // quando se identifica a instancia de uma classe
-    // As chaves e os metodos vão ser adicionados no construtor
-    protected Map<String, Method> methodMap = new HashMap<String, Method>();
-
 
     // Construtor da Classe Base recebendo apenas a classe do Serviço pertendido
+    // as classes que Herdam desta classe, chamam este construtor, ou a subercarga
+    // do mesmo. 
     protected AbstractDBOperation( T service) {
          this.service = service;
        
@@ -29,7 +26,7 @@ public abstract class AbstractDBOperation <T, M>{
 
 
     // Construtor da Classe Base recebendo o Serviço que pretende usar para aceder à
-    // Base de dados e o Ojeto que pretende Armazenar ou atualizar
+    // Base de dados e o Ojeto que pretende Armazenar ou pesquisar
     protected AbstractDBOperation( T service, M objectInstance) {
           this.service = service;
           this.objectInstance = objectInstance;
@@ -51,29 +48,77 @@ public abstract class AbstractDBOperation <T, M>{
     // fazer a sua propria implementação ou, subscrever algum metodo.
     // Este método foi pensado pois é importante defenir uma Ordem pela qual o 
     // algoritmo que realiza operações à base de dados ocorre, havendo codigo
-    // que pode ser partilhado. As etapas identificadas foram:
-    // 1º Injetar o Serviço mais o Objecto que necessitassem, se fosse necessário
-    // 2º Verificar a que classe o objeto pertense, pois queria que a classe fosse generica
+    // que pode ser partilhado, implementado na classe Base e reutilizado pelas
+    // classes que herdam, evitando assim duplicação de código.
+    // As etapas identificadas foram:
+    // 1º Injetar o Serviço, mais o Objecto se fosse necessário
+    // 2º Criar o map<String, Mathod> para mapear as chaves (String) para a fazer execução dos respetivos metodos
+    // 3º Verificar a que classe o objeto pertense, pois queria que a classe fosse generica
     // de modo a que a mesma classe recebesse objetos de serviços diferentes, podendo assim reaproveitar o codigo.
     // Desta forma tambem conseguimos garantir um fraco acuplamento entre as classes
     // Concentrando tudo isso na classe que efetua as pesquisas ou os insertes, que são 
     // as unicas que conhecem as classes dos serviços e entidades pois necessitam de comunicar com os serviços.
-    // 3º Executar a operação, sendo ela pesquisar, inserir ou atualizar.
-    // 4º Devolver sempre um JSON Object Pronto para ser devolvido como resposta 
+    // 4º Executar a operação, sendo ela pesquisar ou inserir
+    // 5º Devolver sempre um JSON Object Pronto para ser devolvido como resposta 
     // ao pedido do feito à API. 
     public JSONObject executeAction()
     {
         JSONObject result = new JSONObject();
+      
         createMethodMap();
         String className = checkInstance();
         JSONObject obj = executeOperation(className);
-        System.out.println("obj: " + obj.toString());
         if (checkReturnObject(obj))
         {
            return obj;
         }
-        return null; 
+        return result; 
     }
+
+
+    // Este método vai fazer a verificação da instancia, a que classe Service pertence
+    // após verificar essa instancia, vai devolver a chave do metodo correspondente a essa classe
+    // do mapa. Alguns Services Permitem pesquisas com condições parametro "M" 
+    // Este método é implementado na Classe Base, pois para evitar a duplicação de código nas classes 
+    // que herdam desta classe, pois assim, não tem que ser feita esta verificação em ambas
+    // as classes, o que evita duplicação de código
+    protected String checkInstance() {
+        if (this.getService() instanceof IConfigAnalyticsParams)
+        {   System.out.println("Service: " + this.service);
+            System.out.println("Instance of: ConfigAnalyticsParamsService");
+            return "getAllConfigAnalitics";
+        }
+
+        if (this.getService() instanceof IConfigParametersService)
+        {
+            System.out.println("Service: " + this.service);
+            System.out.println("Instance of: ConfigParamsService");
+            return "getAllConfigParams";
+
+        }
+        if (this.getService() instanceof IAnaliticDaoService)
+        {
+            System.out.println("Service: " + this.service);
+            if (this.getObjectInstance() instanceof JSONObject)
+            {
+                System.out.println("É instancia AnaliticDaoService");
+                return "StudentAnalitics";
+            }
+            System.out.println("Instance of: AnaliticsAtivity");
+            return "getAllAnalitics";
+
+        }    
+        if(this.getService() instanceof IDeploy)
+        {
+            System.out.println("Service: " + this.service);
+            System.out.println("Instance of: DeployService");
+            return "addInstanceAtivity";
+        }
+
+        return new String();
+    }
+
+    
 
     // Metodo abstrato que as classes são Obrigadas a implementar para conseguirem
     // adicionar os metodos ao mapa para fazer o mapeamento "String -> Metodo"
@@ -82,7 +127,8 @@ public abstract class AbstractDBOperation <T, M>{
     // metodo chamado pelo controller que vai devolver um JSONObject
     //implementado na classe que vai fazer as pesquisas
     protected abstract JSONObject executeOperation(String value);
-    protected abstract String checkInstance();
+    
+
 
     // verificar se o registo contem informação antes de ser devolvido ao controller
     protected boolean checkReturnObject(JSONObject obj)
@@ -91,10 +137,5 @@ public abstract class AbstractDBOperation <T, M>{
                 return true;
         return false;
     }
-
-   
-
-   
-    
     
 }

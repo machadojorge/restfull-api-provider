@@ -9,10 +9,9 @@ import java.util.Map;
 import org.json.JSONObject;
 
 import com.estudarecompensa.ativityprovider.entities.ConfigManager.DeployActivity;
-import com.estudarecompensa.ativityprovider.services.AnaliticDaoService;
-import com.estudarecompensa.ativityprovider.services.ConfigAnalyticsParamsService;
+import com.estudarecompensa.ativityprovider.entities.DAO.AnaliticDao;
+import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDaoService;
 import com.estudarecompensa.ativityprovider.services.DeployService;
-import com.estudarecompensa.ativityprovider.utils.CheckExist;
 
 public class InsertDBOperation<T, M> extends AbstractDBOperation {
 
@@ -38,9 +37,7 @@ public class InsertDBOperation<T, M> extends AbstractDBOperation {
         try{
             Class<?> classeAtual = this.getClass();
             methodMap.put("addInstanceAtivity", classeAtual.getMethod("addInstanceAtivity"));
-            methodMap.put("addAtivityQuestions", classeAtual.getMethod("addAtivityQuestions"));
-            methodMap.put("addStudentAnalitics", classeAtual.getMethod("addStudentAnalitics"));
-            methodMap.put("updateStudentAnalitics", classeAtual.getMethod("updateStudentAnalitics"));        
+            methodMap.put("StudentAnalitics", classeAtual.getMethod("StudentAnalitics"));      
         }
         catch(NoSuchMethodException e){
             System.out.println("Error NoSuchMethodException: " + e.getMessage());
@@ -50,29 +47,8 @@ public class InsertDBOperation<T, M> extends AbstractDBOperation {
         }
     }
 
-
-    @Override
-    protected String checkInstance() {
-      
-        if(this.getService() instanceof DeployService)
-        {
-            System.out.println("Instance of: DeployService");
-            return "addInstanceAtivity";
-        }
-
-        if(this.getService() instanceof AnaliticDaoService)
-        {
-            System.out.println("Instance of: AnaliticDaoService");
-            if (this.getObjectInstance() instanceof JSONObject)
-            {
-                return "updateStudentAnalitics";
-            }
-            return "addStudentAnalitics";
-        }
-       // Falta adicionar uma tabela e um metodo
-        return null;
-    }
-
+    // Este método vais receber a chave do método correspondente no Mapa de métodos, a fim de,
+    // Chamar o método para realizar a o insert na tabela especifica
     @Override
     public JSONObject executeOperation(String value) {
         JSONObject result = new JSONObject();
@@ -86,40 +62,45 @@ public class InsertDBOperation<T, M> extends AbstractDBOperation {
 
     }
 
-  
- 
-    protected boolean checkRecord()
+    // Metodo para inserir os IDs de novos deploys que tenham sido feitos, para manter um registo
+    // dos deploys das atividades
+    public JSONObject addInstanceAtivity()
     {
-        List<DeployActivity> activities = (List<DeployActivity>) ((DeployService) this.getService()).getAllDeployInstance();
-        if(!CheckExist.existInDatabase(activities, ((DeployActivity) this.getObjectInstance()).getintance_ativity()))
+        JSONObject jsonObject = new JSONObject();
+        String instanceAtivity = (String)this.getObjectInstance();
+        List<DeployActivity> activities = ((DeployService) this.getService()).findByInstanceAtivity(instanceAtivity);
+      
+        if (activities.isEmpty())
         {
-            System.out.println( "Ativities: !" + activities);
-            boolean result = ((DeployService)this.getService()).saveValues((DeployActivity)this.getObjectInstance());
-            System.out.println( "Registo guardado code: " + result);
-            return result;
+           boolean result =  ((DeployService) this.getService()).saveValues(new DeployActivity(instanceAtivity));
+           if (result)
+           {
+               jsonObject.put("Save Record:", "True");
+               return jsonObject;
+           }
         }
-        
-        return false;
-        // if(this.getService() instanceof DeployService)
-        // {
-        // List<DeployActivity> activities = (List<DeployActivity>) ((DeployService) this.getService()).getAllDeployInstance();
-        // if(!CheckExist.existInDatabase(activities, ((DeployActivity) this.getObjectInstance()).getintance_ativity()))
-        // {
-        //    return true;
-        // }
-        // }
-        // return false;
+        jsonObject.put("Save Record:", "False");
+        return jsonObject;
+    } 
+
+
+    // Este metodo vai adicionar na tabela a lista de analiticos para este aluno nesta atividade
+    public JSONObject StudentAnalitics()
+    {
+        JSONObject jsonObject = new JSONObject();
+        String instanceAtivity = (String) ((JSONObject) this.getObjectInstance()).get("InstanceID");
+        String instanceStudent = (String) ((JSONObject) this.getObjectInstance()).get("StudentID"); 
+        boolean result =  ((IAnaliticDaoService) this.getService()).saveValues(new AnaliticDao(instanceAtivity, instanceStudent));
+        if (result)
+        {
+            jsonObject.put("Save Record:", "True");
+            System.out.println("Object Saved: " + jsonObject.toString());
+            return jsonObject;
+        }     
+        jsonObject.put("Save Record:", "False");
+        return jsonObject;
     }
-
-   
-
-    // @Override
-    // public JSONObject executeOperation(String value) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'executeOperation'");
-    // }
-
-
-    
-    
 }
+
+    
+

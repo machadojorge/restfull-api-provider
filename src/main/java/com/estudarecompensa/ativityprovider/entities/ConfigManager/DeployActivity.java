@@ -9,9 +9,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_ativity_instance")
 public class DeployActivity {
-
+    
     private static final long serialVersionUID = 1L;
 
+
+    // Esta classe vai estar associada à tabela da base de dados responsavel por
+    // armazenar todos os deploys de uma atividade
+    // Sempre que existir um novo deploy, vai ser guardado o id desse deploy na base de dados
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long instance_id;

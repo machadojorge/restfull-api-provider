@@ -6,48 +6,48 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.estudarecompensa.ativityprovider.entities.DAO.AnaliticDao;
-import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDao;
+import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDaoService;
 import com.estudarecompensa.ativityprovider.repositories.AnaliticDaoRepository;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
-public class AnaliticDaoService implements IAnaliticDao <AnaliticDao>{
+public class AnaliticDaoService implements IAnaliticDaoService <AnaliticDao>{
 
     @Autowired
     private AnaliticDaoRepository repository;
 
 
-    public List<AnaliticDao> findByativity_instance(String valorColuna)
-    {
-        List<AnaliticDao> listFromRepository = repository.encontrarPorColunas(valorColuna);
-
-        return listFromRepository;
-        
-    }
-
-    public List<AnaliticDao> findByativity_student(String valorColuna, String valorColuna_)
-    {
-        List<AnaliticDao> listFromRepository = repository.encontrarPorStudent(valorColuna, valorColuna_);
-
-        return listFromRepository;
-        
-    }
+      // Metodo que vai efetuar uma pesquisa dos registos na base de dados que tenham um determinado valor
+    // Neste caso, vai pesquisar por ativity Deploy ID ou por Student ID
     @Override
-    public List<AnaliticDao> getAllDeployInstance() {
-        List<AnaliticDao> listFromRepository = repository.findAll();
+    public List<AnaliticDao> findByativityInstance(String value) {
+        List<AnaliticDao> listFromRepository = repository.encontrarPorColunas(value);
 
-
-       return listFromRepository;
+        return listFromRepository;
     }
 
+
+    // Metodo que  vai efetuar uma pesquisa de acordo com duas condiçoes, 
+    // o ativityID e o id do utilizador, devolvendo o registo analitico desse utilizador nessa atividade
+    @Override
+    public List<AnaliticDao> findByativityInstanceStudent(String instance, String Student) 
+    {
+        List<AnaliticDao> listFromRepository = repository.encontrarPorStudent(instance, Student);
+
+        return listFromRepository;
+    }
+
+
+    // Este método vai guardar na base de dados os valores analiticos obtidos pelo utilizador
+    // durante a atividade
     @Override
     public boolean saveValues(AnaliticDao deployActivity) {
         repository.save(deployActivity);
         return true;
     }
 
-     
+     // Este método vai atualizar os valores, obtem o registo existente na base de dados e chama
+     // um metod para atualizar esses valores com os valores recebidos e volta a guardar esses valores na base de dados
+     // Ainda não esta completo nem testado
     @Override
     public AnaliticDao update(Long id, AnaliticDao obj)
     {
@@ -75,5 +75,4 @@ public class AnaliticDaoService implements IAnaliticDao <AnaliticDao>{
 
     }
     
-
 }
