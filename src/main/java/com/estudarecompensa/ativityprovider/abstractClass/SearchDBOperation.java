@@ -15,8 +15,6 @@ import com.estudarecompensa.ativityprovider.entities.AtivityPerguntas;
 import com.estudarecompensa.ativityprovider.entities.AtivityRespostas;
 import com.estudarecompensa.ativityprovider.entities.ConfigParameters;
 import com.estudarecompensa.ativityprovider.entities.ConfigManager.ConfigAnalyticsAtivity;
-import com.estudarecompensa.ativityprovider.entities.DAO.AnaliticDao;
-import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDaoService;
 import com.estudarecompensa.ativityprovider.interfaces.IAtivityPerguntas;
 import com.estudarecompensa.ativityprovider.interfaces.IAtivityRespostas;
 import com.estudarecompensa.ativityprovider.interfaces.IJson;
@@ -59,7 +57,6 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
             methodMap.put("getAllConfigParams", classeAtual.getMethod("getAllConfigParams"));
             methodMap.put("addPerguntas", classeAtual.getMethod("addPerguntas"));
             methodMap.put("addRespostas", classeAtual.getMethod("addRespostas"));
-            methodMap.put("StudentAnalitics", classeAtual.getMethod("StudentAnalitics"));
             methodMap.put("getAnaliticsResult", classeAtual.getMethod("getAnaliticsResult"));
         }
         catch(NoSuchMethodException e){
@@ -143,44 +140,17 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
         return result;
     }
 
-
-    // Este método Vai fazer uma pesquisa pelo Deploy Ativity ID e pelo Student ID, 
-    // pesquisando pelos analiticos desse aluno nessa atividade
-    public JSONObject StudentAnalitics()
-    {
-        // Vamos extrair os dois parametros do JSONObject do getObjectInstance
-        JSONObject result = (JSONObject)this.getObjectInstance();
-        String  ativityId = result.getString("InstanceID");
-        String student_id = (String) result.get("StudentID");
-
-        List<AnaliticDao> analitics = ((IAnaliticDaoService) this.getService()).findByativityInstanceStudent(ativityId, student_id);//.findByativity_student(ativityId,student_id);
-       
-        JSONObject jsonObject = new JSONObject();
-        for(AnaliticDao t : analitics)
-        {
-             // Usa reflexão para obter os campos da classe
-            for (java.lang.reflect.Field campo : t.getClass().getDeclaredFields()) {
-                try {
-                    campo.setAccessible(true);
-                    Object valor = campo.get(t);
-                    jsonObject.put(campo.getName(), valor);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        return jsonObject;
-    } 
-    
+    /**
+     * Este método é reponsavel por pesquisar todos os analiticos armazenados para 
+     * uma tividade e para um utilizador. Isto é util para atualizar os analiticos quando estiver a 
+     * responder à atividade
+     * @return (JSONObject) com todos os analiticos  
+     */
     public JSONObject addRespostas()
     {
         AtivityRespostas apDB = new AtivityRespostas();
         String instanceAtivity =  (String) ((Map) this.getObjectInstance()).get("activityID");
         String instanceStudent = (String) ((Map) this.getObjectInstance()).get("Inven!RAstdID");
-       
-        System.out.println("####################################");
-        System.out.println(instanceAtivity + "   ---   " + instanceStudent);
         JSONObject result = new JSONObject();
        
        apDB = ((IAtivityRespostas)this.getService()).findByativityStudent(instanceAtivity, instanceStudent);
@@ -194,12 +164,16 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
        }
        result.put("status", "false");
        return result;
-
     }
 
+    /**
+     * Este método é reponsavel por pesquisar todos as perguntas armazenados para 
+     * uma tividade e para um utilizador. Isto é util para atualizar os analiticos quando estiver a 
+     * responder à atividade
+     * @return (JSONObject) com todos as perguntas e respostas
+     */
     public JSONObject addPerguntas()
     {
-
         AtivityPerguntas apDB = new AtivityPerguntas();
         String instanceAtivity =  (String) ((Map) this.getObjectInstance()).get("activityID");
         String instanceStudent = (String) ((Map) this.getObjectInstance()).get("Inven!RAstdID");
@@ -221,39 +195,30 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
 
     }
 
+    /**
+     * Este método é reponsavel por pedir a consulta à base de dados pelos 
+     * analiticos dos utilizadores em uma atividade. Após isso, cria uma 
+     * lista com todos os parametros por id de estudante/utilizador e 
+     * devolve como resposta
+     * @return (JSONObject) result, em que a chave é "status":lista
+     */
     public JSONObject getAnaliticsResult()
     {
-       
         String InveniraStdID = (String)this.getObjectInstance();
-        System.out.println(InveniraStdID);
         List<AtivityRespostas> apDB = new ArrayList<AtivityRespostas>();
-
-        System.out.println("Analitics");
         JSONObject result = new JSONObject();
         Map<String, Object> resultAnalitics = new HashMap<String, Object>();
         List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
        apDB = ((IAtivityRespostas)this.getService()).findByStudentInstance(InveniraStdID);
-        System.out.println("apDB -->" + apDB.toString());
+   
        for (AtivityRespostas ap : apDB)
-       {
-        // if (InveniraStdID.equals(ap.getStudent_id()))
-        // {
-        //     // insere no map
-        // }
-      
-        System.out.println(ap.getAtivity_id());
-        System.out.println("AP -> " + ap.getStudent_id());
-        System.out.println("Ap -> " + ap.toString());
-        resultAnalitics = CheckExist.createMapResponse(ap);
-        resultList.add(resultAnalitics);
+       {      
+            resultAnalitics = CheckExist.createMapResponse(ap);
+            resultList.add(resultAnalitics);
        }
        result.put("status", resultList);
-       System.out.println("Antes de ser devolvido: " + resultList);
        return result;
-
     }
-
-   
 }
 
 

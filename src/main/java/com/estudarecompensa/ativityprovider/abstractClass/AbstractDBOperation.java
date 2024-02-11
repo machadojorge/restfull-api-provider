@@ -1,12 +1,10 @@
 package com.estudarecompensa.ativityprovider.abstractClass;
 
 import org.json.JSONObject;
-import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDaoService;
 import com.estudarecompensa.ativityprovider.interfaces.IAtivityPerguntas;
 import com.estudarecompensa.ativityprovider.interfaces.IAtivityRespostas;
 import com.estudarecompensa.ativityprovider.interfaces.IConfigAnalyticsParams;
 import com.estudarecompensa.ativityprovider.interfaces.IConfigParametersService;
-import com.estudarecompensa.ativityprovider.interfaces.IDeploy;
 import com.estudarecompensa.ativityprovider.utils.CheckExist;
 
 
@@ -98,24 +96,6 @@ public abstract class AbstractDBOperation <T, M>{
             System.out.println("Instance of: ConfigParamsService");
             return "getAllConfigParams";
 
-        }
-        if (this.getService() instanceof IAnaliticDaoService)
-        {
-            System.out.println("Service: " + this.service);
-            if (this.getObjectInstance() instanceof JSONObject)
-            {
-                System.out.println("É instancia AnaliticDaoService");
-                return "StudentAnalitics";
-            }
-            System.out.println("Instance of: AnaliticsAtivity");
-            return "getAllAnalitics";
-
-        }    
-        if(this.getService() instanceof IDeploy)
-        {
-            System.out.println("Service: " + this.service);
-            System.out.println("Instance of: DeployService");
-            return "addInstanceAtivity";
         }
         if(this.getService() instanceof IAtivityPerguntas)
         {

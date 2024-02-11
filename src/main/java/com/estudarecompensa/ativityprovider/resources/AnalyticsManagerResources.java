@@ -20,16 +20,22 @@ public class AnalyticsManagerResources {
     
     @Autowired
     private IAtivityRespostas serviceRespost;
-    // This endpoint goes return the analiticas results of the activity, analytics_list_url
+
+    /**
+     * Este método é o endpoint responsavel por receber o pedido pelos dados Analiticos
+     * de cada atividade de cada estudante. 
+     * @param activityID É o id da atividade que pretende os dados Analiticos
+     * @return Uma String com os dados no formato correto que o Inven!RA espera.
+     */
     @RequestMapping(value="/analytics_review_ativity", method=RequestMethod.POST)
     public ResponseEntity<String> findAllAnalyticsParams(@RequestBody String activityID)
     {
-        JSONObject objtemp = new JSONObject();
-        System.out.println("String: " + activityID.getClass().getName());
+        // Extrair o ID da atividade
         JSONObject json = new JSONObject(activityID.toString());
-        System.out.println("JSON: " + json.get("activityID"));
         String id =  json.get("activityID").toString();
-        System.out.println("ID: " + id);
+
+        // realizar a pesquisa
+        JSONObject objtemp = new JSONObject();
         AbstractDBOperation operationUpdate = new SearchDBOperation(serviceRespost, id);
         objtemp = operationUpdate.executeAction();
         System.out.println("Analiticd --->: " + objtemp);
@@ -37,16 +43,4 @@ public class AnalyticsManagerResources {
        
     }
 
-    public String decodeActivityId(String activityID)
-    {
-         try {
-            JSONObject jsonObject = new JSONObject(activityID);
-            String id = jsonObject.getString("activityID");
-            return id;//"1234";// map.get("activityID").toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return activityID;
-    }
-    
 }

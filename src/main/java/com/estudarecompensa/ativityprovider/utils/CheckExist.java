@@ -9,38 +9,9 @@ import java.util.Map.Entry;
 import org.json.JSONObject;
 
 import com.estudarecompensa.ativityprovider.entities.AtivityRespostas;
-import com.estudarecompensa.ativityprovider.entities.ConfigManager.DeployActivity;
-import com.estudarecompensa.ativityprovider.entities.DAO.AnaliticDao;
 
 public class CheckExist {
 
-    public static boolean existInDatabase(List<DeployActivity> list, String valueCheck)
-    {
-        
-        for (DeployActivity activity : list)
-        {
-            if (activity.getintance_ativity().equals(valueCheck))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-       public static boolean existAnaliticsInDatabase(List<AnaliticDao> list, String ativity_id, String student_id)
-    {
-        
-        for (AnaliticDao activity : list)
-        {
-            if (activity.getStudent_id().equals(student_id) && activity.getAtivity_instance().equals(ativity_id))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    
     // verificar se o registo contem informação antes de ser devolvido ao controller
     public static boolean checkReturnObject(JSONObject obj)
     {
@@ -63,38 +34,38 @@ public class CheckExist {
         names.put("respostas_corretas", "Respostas Corretas");
         names.put("recompensa", "Recompensas");
 
-
-
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = new HashMap<String, Object>();
         List<JSONObject> jsonQuant = new ArrayList<JSONObject>();
         List<JSONObject> jsonQual = new ArrayList<JSONObject>();
-        System.out.println(ap.getQuestions());
-        System.out.println(".........  - ............");
         
         String newString = ap.getQuestions().replace('=', ':');
-        System.out.println("String: " + newString);
-
         JSONObject objtemp = new JSONObject(newString);
-        System.out.println("MAPA --> " + objtemp.toMap());
         
         map.put("innveniraStdID", ap.getStudent_id());
         map.put("qualAnalytics", jsonQual);
-        
         for (Entry<String, Object> entrada : objtemp.toMap().entrySet()) {
             JSONObject temp = new JSONObject();
 
             temp.put("name", names.get(entrada.getKey()));
             temp.put("value", entrada.getValue());
             jsonQuant.add(temp);
-           
         }
-
-       
-        System.out.println("json:  " + jsonQuant);
         map.put("quantAnalytics", jsonQuant);
        
         return map;
     }
     
+    public static int compareResult(String str1, String str2)
+    {
+        if (str1 == null || str2 == null)
+        {
+            return 0;
+        }
+        if (str1.equals(str2))
+        {
+            return 1;
+        }
+        return 0;
+    }
 }

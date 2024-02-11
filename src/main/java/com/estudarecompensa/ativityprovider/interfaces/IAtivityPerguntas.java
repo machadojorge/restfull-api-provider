@@ -12,6 +12,5 @@ public interface IAtivityPerguntas <T> {
     public AtivityPerguntas  findByativityStudent(String instance, String Student);
 
     public boolean saveValues(AtivityPerguntas deployActivity);
-    public AtivityPerguntas update(Long id, AtivityPerguntas obj);
 }
     
