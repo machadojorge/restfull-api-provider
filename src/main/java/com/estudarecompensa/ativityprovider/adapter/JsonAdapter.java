@@ -55,13 +55,13 @@ public class JsonAdapter<T> implements IJson {
         return finalJson;
     }
 
-
+    // metodo para ir pesquisar à base de dados e devolver no formato correto
+    // os dados analiticos para configurar uma atividade
     public JSONObject getAnalitics()
     {
-     
         // Chamar o metodo que vai buscar os dados à base de dados
-        List<ConfigAnalyticsAtivity> analitics = ((ConfigAnalyticsParamsService) service).getAllAnalyticsParams();
-        System.out.println("Result: " + analitics);
+        List<ConfigAnalyticsAtivity> analitics = ((ConfigAnalyticsParamsService) service)
+            .getAllAnalyticsParams();
         //criar Objectos JSON Auxiliares
         JSONObject finalJson = new JSONObject();
 
@@ -69,13 +69,13 @@ public class JsonAdapter<T> implements IJson {
        List<JSONObject> quanlAnalytics = new ArrayList<JSONObject>();
        List<JSONObject> quantAnalytics = new ArrayList<JSONObject>();
 
-        // Converter a lista para o objecto jSON, no formato desejado pronto a ser devolvido na resposta
+        // Converter a lista para o objecto jSON, no formato desejado pronto a 
+        // ser devolvido na resposta
           for(ConfigAnalyticsAtivity t : analitics)
         {
             JSONObject map = new JSONObject();
             map.put("name",t.getAttribute());
             map.put("type", t.getType());
-
             if (t.getTypeOfAnalyses() == 1)
             {
                 quantAnalytics.add(map);
@@ -87,7 +87,6 @@ public class JsonAdapter<T> implements IJson {
         }
        finalJson.put("qualAnalytics", quanlAnalytics);
        finalJson.put("quatAnalytics", quantAnalytics);
-
        // Devolver o JSON pronto a ser adicionado à resposta ao Inven!RA
        return finalJson;
     }

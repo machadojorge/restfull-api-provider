@@ -2,9 +2,12 @@ package com.estudarecompensa.ativityprovider.abstractClass;
 
 import org.json.JSONObject;
 import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDaoService;
+import com.estudarecompensa.ativityprovider.interfaces.IAtivityPerguntas;
+import com.estudarecompensa.ativityprovider.interfaces.IAtivityRespostas;
 import com.estudarecompensa.ativityprovider.interfaces.IConfigAnalyticsParams;
 import com.estudarecompensa.ativityprovider.interfaces.IConfigParametersService;
 import com.estudarecompensa.ativityprovider.interfaces.IDeploy;
+import com.estudarecompensa.ativityprovider.utils.CheckExist;
 
 
 public abstract class AbstractDBOperation <T, M>{
@@ -68,7 +71,7 @@ public abstract class AbstractDBOperation <T, M>{
         createMethodMap();
         String className = checkInstance();
         JSONObject obj = executeOperation(className);
-        if (checkReturnObject(obj))
+        if (CheckExist.checkReturnObject(obj))
         {
            return obj;
         }
@@ -114,6 +117,24 @@ public abstract class AbstractDBOperation <T, M>{
             System.out.println("Instance of: DeployService");
             return "addInstanceAtivity";
         }
+        if(this.getService() instanceof IAtivityPerguntas)
+        {
+            System.out.println("Service: " + this.service);
+            System.out.println("Instance of: AtivityPerguntas");
+            return "addPerguntas";
+        }
+        if(this.getService() instanceof IAtivityRespostas && this.getObjectInstance() instanceof String)
+        {
+            System.out.println("Service: " + this.service);
+            System.out.println("Instance of: AtivityRespostasAnaliticsResult");
+            return "getAnaliticsResult";
+        }
+        if(this.getService() instanceof IAtivityRespostas)
+        {
+            System.out.println("Service: " + this.service);
+            System.out.println("Instance of: AtivityRespostas");
+            return "addRespostas";
+        }
 
         return new String();
     }
@@ -130,12 +151,12 @@ public abstract class AbstractDBOperation <T, M>{
     
 
 
-    // verificar se o registo contem informação antes de ser devolvido ao controller
-    protected boolean checkReturnObject(JSONObject obj)
-    {
-        if (obj!= null && !obj.isEmpty())
-                return true;
-        return false;
-    }
+    // // verificar se o registo contem informação antes de ser devolvido ao controller
+    // protected boolean checkReturnObject(JSONObject obj)
+    // {
+    //     if (obj!= null && !obj.isEmpty())
+    //             return true;
+    //     return false;
+    // }
     
 }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuração da Atividade</title>
+    <img src="log.jpg" alt="+ Estudo + Recompensa"> 
+    <meta name="viewport_form" content="width=device-width, initial-scale=1.0">
+    <style>
+    
+    /* Estilo para os botões */
+    button {
+        padding: 10px 20px; /* Adiciona espaço interno ao botão */
+        font-size: 16px; /* Define o tamanho da fonte */
+    }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .question {
+            width: 60%;
+        }
+
+        .question {
+            width: 45%;
+        }
+
+        .answer {
+            width: 45%;
+        }
+
+        .text-box {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+  
+</head>
+<body>
+  
+    <h1>+ Estudo + Recompensa </h1>
+    <h2>Informação da Atividade</h2>
+    <p>
+
+    </p>
+    <p>
+
+    </p>
+    <label for="Atividade ID:">Atividade ID:</label>
+    <h2 th:text="${ativity_id}"></h2>
+    <label for="Estudante ID:">Estudante ID:</label>
+    <h2 th:text="${student_id}"></h2>
+    
+<!-- Formulário com URL dinâmica -->
+<form method="get" th:action="@{/start_ativity/{ativity_id}/{student_id}(ativity_id=${ativity_id}, student_id=${student_id})}">
+    <label for="information">Informações sobre a atividade:</label>
+    <p>
+
+    </p>
+    <button type="submit">Voltar</button>
+</form>
+
+
+</body>
+</html>

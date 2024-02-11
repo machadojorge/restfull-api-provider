@@ -114,6 +114,15 @@ public class ConfigParameters{
     }
 
     
+    public List<Map<String, String>> getConfigList() {
+        return configList;
+    }
+
+
+    public void setConfigList(List<Map<String, String>> configList) {
+        ConfigParameters.configList = configList;
+    }
+
     public void showMap()
     {
         for (Map<String, String> data : configList) {

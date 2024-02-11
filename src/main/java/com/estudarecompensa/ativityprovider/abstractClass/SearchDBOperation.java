@@ -6,15 +6,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.JSONObject;
 
+import com.estudarecompensa.ativityprovider.adapter.JsonAdapter;
+import com.estudarecompensa.ativityprovider.entities.AtivityPerguntas;
+import com.estudarecompensa.ativityprovider.entities.AtivityRespostas;
 import com.estudarecompensa.ativityprovider.entities.ConfigParameters;
 import com.estudarecompensa.ativityprovider.entities.ConfigManager.ConfigAnalyticsAtivity;
 import com.estudarecompensa.ativityprovider.entities.DAO.AnaliticDao;
 import com.estudarecompensa.ativityprovider.interfaces.IAnaliticDaoService;
+import com.estudarecompensa.ativityprovider.interfaces.IAtivityPerguntas;
+import com.estudarecompensa.ativityprovider.interfaces.IAtivityRespostas;
+import com.estudarecompensa.ativityprovider.interfaces.IJson;
 import com.estudarecompensa.ativityprovider.services.ConfigAnalyticsParamsService;
 import com.estudarecompensa.ativityprovider.services.ConfigParametersService;
+import com.estudarecompensa.ativityprovider.utils.CheckExist;
 
 
 public class SearchDBOperation<T, M> extends AbstractDBOperation {
@@ -49,9 +57,10 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
             Class<?> classeAtual = this.getClass();
             methodMap.put("getAllConfigAnalitics", classeAtual.getMethod("getAllConfigAnalitics"));
             methodMap.put("getAllConfigParams", classeAtual.getMethod("getAllConfigParams"));
-            // methodMap.put("getAllAnalitics", classeAtual.getMethod("getAllAnalitics"));
-            // methodMap.put("getAllParams", classeAtual.getMethod("getAllParams"));
+            methodMap.put("addPerguntas", classeAtual.getMethod("addPerguntas"));
+            methodMap.put("addRespostas", classeAtual.getMethod("addRespostas"));
             methodMap.put("StudentAnalitics", classeAtual.getMethod("StudentAnalitics"));
+            methodMap.put("getAnaliticsResult", classeAtual.getMethod("getAnaliticsResult"));
         }
         catch(NoSuchMethodException e){
             System.out.println("Error NoSuchMethodException: " + e.getMessage());
@@ -84,40 +93,44 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
     // para fornecer ao inven!RA 
     public JSONObject getAllConfigAnalitics()
     {
-        List<ConfigAnalyticsAtivity> analitics = ((ConfigAnalyticsParamsService) this.getService()).getAllAnalyticsParams();
-        JSONObject finalJson = new JSONObject();
-
-        // criar Listas auxiliares para dados quantitativos e qualitativos
-       List<JSONObject> quanlAnalytics = new ArrayList<JSONObject>();
-       List<JSONObject> quantAnalytics = new ArrayList<JSONObject>();
-
-        // Converter a lista para o objecto jSON, no formato desejado pronto a ser devolvido na resposta
-          for(ConfigAnalyticsAtivity t : analitics)
+        // Esta linha de código implementa um padrão singlton para a classe "ConfigAnaliticsAtivity"
+        ConfigAnalyticsAtivity analyticsParams = ConfigAnalyticsAtivity.getInstance();
+        JSONObject result = new JSONObject();
+        // Verifica se ja existe um objeto criado e se tens os valores armazenados        
+        if (!analyticsParams.getAnaliticsJson().isEmpty())
         {
-            JSONObject map = new JSONObject();
-            map.put("name",t.getAttribute());
-            map.put("type", t.getType());
-
-            if (t.getTypeOfAnalyses() == 1)
-            {
-                quantAnalytics.add(map);
-            }
-            if(t.getTypeOfAnalyses() == 0)
-            {
-                quanlAnalytics.add(map);
-            }   
+            result.put("params", analyticsParams.getAnaliticsJson());
+            return result;
         }
-       finalJson.put("qualAnalytics", quanlAnalytics);
-       finalJson.put("quatAnalytics", quantAnalytics);
-       return finalJson;
+        // Se não tiver chama a classe adapter que vai fazer a consulta e devolver o JSONObject com a resposta
+        IJson jsonObject = new JsonAdapter((ConfigAnalyticsParamsService)this.getService());
+        JSONObject finalJson = jsonObject.toJsonObject();
+
+        // Guarda a resposta na variavel da classe que implementa o singleton para 
+        // poder ser reutilizados os valores
+        analyticsParams.setAnaliticsJson(finalJson);
+        // devolver a resposta
+        result.put("params", finalJson);
+        return result;
     }
 
     // Este método vai pesquisar à base de dados por todos os Parametros de configuração de uma atividade
     public JSONObject getAllConfigParams()
     {
+       
+        ConfigParameters paramsConfig = ConfigParameters.getInstance();
+        JSONObject result = new JSONObject();
+
+        // Verificar se o objeto criado já existe e se tem os valores armazenados nele
+        if (!paramsConfig.returnListConfigParams().isEmpty())
+        {
+            List<Map<String, String>> params = paramsConfig.getConfigList();
+            result.put("params", params);
+            return result;
+        }
+
         List<ConfigParameters> analitics = ((ConfigParametersService) this.getService()).getAllParameters();
         List<Map<String, String>> params = new ArrayList<Map<String, String>>();
-        JSONObject result = new JSONObject();
         for(ConfigParameters t : analitics)
         {
             Map<String, String> map = new HashMap<String, String>();
@@ -125,6 +138,7 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
             map.put("type", t.getType());
             params.add(map);
         }
+        paramsConfig.setConfigList(params);
         result.put("params", params);
         return result;
     }
@@ -159,6 +173,87 @@ public class SearchDBOperation<T, M> extends AbstractDBOperation {
         return jsonObject;
     } 
     
+    public JSONObject addRespostas()
+    {
+        AtivityRespostas apDB = new AtivityRespostas();
+        String instanceAtivity =  (String) ((Map) this.getObjectInstance()).get("activityID");
+        String instanceStudent = (String) ((Map) this.getObjectInstance()).get("Inven!RAstdID");
+       
+        System.out.println("####################################");
+        System.out.println(instanceAtivity + "   ---   " + instanceStudent);
+        JSONObject result = new JSONObject();
+       
+       apDB = ((IAtivityRespostas)this.getService()).findByativityStudent(instanceAtivity, instanceStudent);
+
+       if (apDB != null)
+       {
+            result.put("status", "true");
+            result.put("id", apDB.getId().toString());
+            result.put("questions", apDB.getQuestions());
+            return result;
+       }
+       result.put("status", "false");
+       return result;
+
+    }
+
+    public JSONObject addPerguntas()
+    {
+
+        AtivityPerguntas apDB = new AtivityPerguntas();
+        String instanceAtivity =  (String) ((Map) this.getObjectInstance()).get("activityID");
+        String instanceStudent = (String) ((Map) this.getObjectInstance()).get("Inven!RAstdID");
+       
+        System.out.println(instanceAtivity + "   ---   " + instanceStudent);
+        JSONObject result = new JSONObject();
+       
+       apDB = ((IAtivityPerguntas)this.getService()).findByativityStudent(instanceAtivity, instanceStudent);
+
+       if (apDB != null)
+       {
+            result.put("status", "true");
+            result.put("id", apDB.getId().toString());
+            result.put("questions", apDB.getQuestions());
+            return result;
+       }
+       result.put("status", "false");
+       return result;
+
+    }
+
+    public JSONObject getAnaliticsResult()
+    {
+       
+        String InveniraStdID = (String)this.getObjectInstance();
+        System.out.println(InveniraStdID);
+        List<AtivityRespostas> apDB = new ArrayList<AtivityRespostas>();
+
+        System.out.println("Analitics");
+        JSONObject result = new JSONObject();
+        Map<String, Object> resultAnalitics = new HashMap<String, Object>();
+        List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+       apDB = ((IAtivityRespostas)this.getService()).findByStudentInstance(InveniraStdID);
+        System.out.println("apDB -->" + apDB.toString());
+       for (AtivityRespostas ap : apDB)
+       {
+        // if (InveniraStdID.equals(ap.getStudent_id()))
+        // {
+        //     // insere no map
+        // }
+      
+        System.out.println(ap.getAtivity_id());
+        System.out.println("AP -> " + ap.getStudent_id());
+        System.out.println("Ap -> " + ap.toString());
+        resultAnalitics = CheckExist.createMapResponse(ap);
+        resultList.add(resultAnalitics);
+       }
+       result.put("status", resultList);
+       System.out.println("Antes de ser devolvido: " + resultList);
+       return result;
+
+    }
+
+   
 }
 
 
